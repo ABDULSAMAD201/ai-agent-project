@@ -1,36 +1,47 @@
-from typing import TypedDict
+from langgraph.graph import START, END, StateGraph
 
-from langchain_core.messages import HumanMessage, SystemMessage
-from langgraph.graph import END, START, StateGraph
+from app.graph.state import GraphState
+from app.graph.router import detect_intent
 
-from app.llm.ollama_client import llm
-from app.prompts.sql_prompt import SQL_SYSTEM_PROMPT
-
-
-class GraphState(TypedDict):
-    message: str
-    response: str
-
-
-def sql_agent(state: GraphState):
-
-    messages = [
-        SystemMessage(content=SQL_SYSTEM_PROMPT),
-        HumanMessage(content=state["message"]),
-    ]
-
-    result = llm.invoke(messages)
-
-    return {
-        "response": result.content
-    }
-
+from app.graph.nodes import (
+    explain_sql,
+    detect_sql_bug,
+    optimize_sql,
+    generate_sql,
+)
 
 graph = StateGraph(GraphState)
 
-graph.add_node("sql_agent", sql_agent)
+# Register nodes
+graph.add_node("intent_router", detect_intent)
+graph.add_node("explain_sql", explain_sql)
+graph.add_node("detect_sql_bug", detect_sql_bug)
+graph.add_node("optimize_sql", optimize_sql)
+graph.add_node("generate_sql", generate_sql)
 
-graph.add_edge(START, "sql_agent")
-graph.add_edge("sql_agent", END)
+
+graph.add_edge(START, "intent_router")
+
+
+def route_intent(state: GraphState):
+    return state["intent"]
+
+
+graph.add_conditional_edges(
+    "intent_router",
+    route_intent,
+    {
+    "explain": "explain_sql",
+    "bug_detection": "detect_sql_bug",
+    "optimization": "optimize_sql",
+    "generation": "generate_sql",
+
+    },
+)
+
+graph.add_edge("explain_sql", END)
+graph.add_edge("detect_sql_bug", END)
+graph.add_edge("optimize_sql", END)
+graph.add_edge("generate_sql", END)
 
 workflow = graph.compile()

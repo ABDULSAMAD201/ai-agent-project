@@ -170,7 +170,7 @@ python test_graph.py
 
 ## 📌 Current Progress
 
-### ✅ Phase 1 Completed
+### Phase 1
 
 - Project setup
 - FastAPI application
@@ -192,8 +192,23 @@ python test_graph.py
 
 ### Phase 3
 
-- Conversation memory
-- Stateful workflows
+Implemented features:
+
+- SQL Query Explanation
+- SQL Bug Detection
+- SQL Query Optimization
+- Natural Language to SQL Generation
+- Intent-based routing using LangGraph
+- Modular graph architecture
+- Reusable LLM helper for cleaner node implementation
+
+Current Capabilities:
+
+- Explain SQL queries
+- Detect SQL syntax and logic issues
+- Suggest query optimizations
+- Generate SQL from natural language
+- Automatically route requests to the appropriate AI node
 
 ### Phase 4
 
