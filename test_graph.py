@@ -2,7 +2,13 @@ from app.graph.workflow import workflow
 
 result = workflow.invoke(
     {
-        "message": "Explain LangGraph in one sentence."
+        "message": """
+Explain this SQL query:
+
+SELECT *
+FROM employees
+WHERE salary > 50000;
+"""
     }
 )
 
