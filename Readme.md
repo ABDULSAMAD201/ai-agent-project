@@ -170,7 +170,7 @@ python test_graph.py
 
 ## 📌 Current Progress
 
-### ✅ Phase 1 Completed
+### ✅ Phase 1 
 
 - Project setup
 - FastAPI application
@@ -184,7 +184,7 @@ python test_graph.py
 
 ## 📅 Roadmap
 
-### Phase 2
+### Phase 2 
 
 - Chat API endpoint
 - LangGraph execution through FastAPI
