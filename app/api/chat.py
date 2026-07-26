@@ -12,6 +12,11 @@ def chat(request: ChatRequest):
     result = workflow.invoke(
         {
             "message": request.message
+        },
+        config={
+            "configurable": {
+                "thread_id": request.session_id
+            }
         }
     )
 

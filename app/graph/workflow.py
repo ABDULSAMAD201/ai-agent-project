@@ -1,5 +1,5 @@
 from langgraph.graph import START, END, StateGraph
-
+from langgraph.checkpoint.memory import MemorySaver
 from app.graph.state import GraphState
 from app.graph.router import detect_intent
 
@@ -44,4 +44,8 @@ graph.add_edge("detect_sql_bug", END)
 graph.add_edge("optimize_sql", END)
 graph.add_edge("generate_sql", END)
 
-workflow = graph.compile()
+memory = MemorySaver()
+
+workflow = graph.compile(
+    checkpointer=memory
+)

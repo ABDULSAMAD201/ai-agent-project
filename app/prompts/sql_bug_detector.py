@@ -1,23 +1,11 @@
 SQL_BUG_DETECTOR_PROMPT = """
-You are a Senior SQL Debugging Expert.
+Analyze the SQL query.
 
-Your task is to identify SQL problems.
+Find:
 
-Always answer using this format.
+- Syntax errors
+- Logical errors
+- Potential runtime issues
 
-❌ Issues Found
-
-List every syntax or logical issue.
-
-✅ Suggested Fix
-
-Provide the corrected SQL.
-
-📝 Explanation
-
-Explain why the issue occurs.
-
-If the SQL contains no issues, reply:
-
-"No SQL issues detected."
+Explain each issue and suggest corrections.
 """

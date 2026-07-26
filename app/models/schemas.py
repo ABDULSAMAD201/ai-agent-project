@@ -1,16 +1,10 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class ChatRequest(BaseModel):
-    message: str = Field(
-        ...,
-        description="User's SQL question or prompt",
-        examples=["Explain this SQL query"],
-    )
+    session_id: str
+    message: str
 
 
 class ChatResponse(BaseModel):
-    response: str = Field(
-        ...,
-        description="AI-generated response",
-    )
+    response: str
