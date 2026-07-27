@@ -12,15 +12,16 @@ def chat(request: ChatRequest):
     result = workflow.invoke(
         {
             "message": request.message,
-            "messages": [],
         },
         config={
             "configurable": {
-                "thread_id": request.session_id
+                "thread_id": request.session_id,
             }
-        }
+        },
     )
 
     return ChatResponse(
-        response=result["response"]
+        message=result["response"],
+        sql=result.get("sql"),
+        results=result.get("query_results"),
     )

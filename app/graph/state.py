@@ -11,3 +11,6 @@ class GraphState(TypedDict):
     intent: str
 
     messages: Annotated[list[BaseMessage], add_messages]
+
+    sql: str
+    query_results: list[dict]
