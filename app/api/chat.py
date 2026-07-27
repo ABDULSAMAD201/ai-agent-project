@@ -11,7 +11,8 @@ def chat(request: ChatRequest):
 
     result = workflow.invoke(
         {
-            "message": request.message
+            "message": request.message,
+            "messages": [],
         },
         config={
             "configurable": {
