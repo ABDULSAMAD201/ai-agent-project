@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.graph.workflow import workflow
+from app.graph.agent import agent
 from app.models.schemas import ChatRequest, ChatResponse
 
 router = APIRouter()
@@ -9,9 +9,10 @@ router = APIRouter()
 @router.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest):
 
-    result = workflow.invoke(
+    result = agent.invoke(
         {
             "message": request.message,
+            "messages": [],
         },
         config={
             "configurable": {

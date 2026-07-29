@@ -1,11 +1,11 @@
-from typing import Any
+from typing import Optional, Any
 
 from pydantic import BaseModel
 
 
 class ChatRequest(BaseModel):
-    session_id: str
     message: str
+    session_id: Optional[str] = "default"
 
 
 class ChatResponse(BaseModel):
