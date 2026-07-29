@@ -1,89 +1,133 @@
-# AI Agent Project
+# 🤖 AI SQL Agent
 
-A modular AI Agent built using **FastAPI**, **LangGraph**, **LangChain**, and **Ollama**. This project is designed to serve as a scalable foundation for building intelligent AI workflows, agents, and APIs.
-
----
-
-## 🚀 Features
-
-- FastAPI backend
-- LangGraph workflow engine
-- Ollama integration for local LLMs
-- Environment-based configuration
-- Centralized logging
-- Modular project structure
-- Git version control
+An AI-powered SQL assistant built with **FastAPI**, **LangGraph**, **LangChain**, **Ollama**, and **SQLite**. The agent can generate SQL, explain queries, optimize SQL, detect bugs, inspect database schemas, and safely execute read-only SQL using tool-calling and conversation memory.
 
 ---
 
-## 🛠️ Tech Stack
+## ✨ Features
 
-- Python 3.10+
-- FastAPI
-- LangGraph
-- LangChain
-- LangChain-Ollama
-- Ollama
-- Uvicorn
-- Python-dotenv
+- 💬 Natural language SQL assistant
+- 🧠 LangGraph agent with conversation memory
+- 🛠️ LangChain tool calling
+- 📝 Generate SQL from natural language
+- 📖 Explain SQL queries
+- ⚡ Optimize SQL queries
+- 🐞 Detect SQL bugs and suggest fixes
+- 🗂️ List database tables
+- 📋 Describe database schemas
+- 🔍 Execute read-only SQL queries
+- 🔒 SQL safety validation (blocks destructive queries)
+- 📊 Structured logging
+- 🚀 FastAPI REST API
+- 🗃️ SQLite database integration
 
 ---
 
-## 📁 Project Structure
+# 🏗️ Project Architecture
 
-```text
-ai-agent-project/
+```
+                +------------------+
+                |     FastAPI      |
+                +--------+---------+
+                         |
+                         v
+                +------------------+
+                |   LangGraph AI   |
+                |      Agent       |
+                +--------+---------+
+                         |
+            +------------+-------------+
+            |                          |
+            v                          v
+    SQL Tools                  Database Tools
+    ---------                  --------------
+    • Generate SQL             • List Tables
+    • Explain SQL              • Describe Table
+    • Optimize SQL             • Execute SQL
+    • Detect Bugs
+
+                         |
+                         v
+                  SQLite Database
+```
+
+---
+
+# 📁 Project Structure
+
+```
+AI-SQL-Agent/
 │
 ├── app/
 │   ├── api/
 │   ├── core/
-│   │   ├── config.py
-│   │   └── logger.py
+│   ├── database/
 │   ├── graph/
-│   │   └── workflow.py
 │   ├── llm/
-│   │   └── ollama_client.py
 │   ├── models/
-│   ├── services/
+│   ├── prompts/
+│   ├── tools/
 │   ├── utils/
 │   └── main.py
 │
-├── logs/
 ├── tests/
+├── logs/
+├── database.db
+├── requirements.txt
 ├── .env
 ├── .gitignore
-├── requirements.txt
-├── test_ollama.py
-├── test_graph.py
 └── README.md
 ```
 
 ---
 
-## ⚙️ Installation
+# 🛠️ Tech Stack
 
-### 1. Clone the repository
+| Technology | Purpose                       |
+| ---------- | ----------------------------- |
+| Python     | Programming Language          |
+| FastAPI    | REST API                      |
+| LangGraph  | Agent Workflow                |
+| LangChain  | Tool Calling                  |
+| Ollama     | Local LLM                     |
+| Llama 3.x  | Language Model                |
+| SQLite     | Database                      |
+| SQLAlchemy | ORM / Database Access         |
+| Pydantic   | Request & Response Validation |
+| Uvicorn    | ASGI Server                   |
+
+---
+
+# ⚙️ Installation
+
+## 1. Clone the repository
 
 ```bash
-git clone https://github.com/ABDULSAMAD201/ai-agent-project.git
-cd ai-agent-project
+git clone https://github.com/<your-username>/AI-SQL-Agent.git
+cd AI-SQL-Agent
 ```
 
-### 2. Create a virtual environment
+---
 
-**Windows**
+## 2. Create a virtual environment
+
+### Windows
 
 ```bash
 python -m venv .venv
+.venv\Scripts\activate
 ```
 
-Activate it:
+### Linux / macOS
 
 ```bash
-.venv\Scripts\Activate.ps1
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-### 3. Install dependencies
+---
+
+## 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -91,60 +135,41 @@ pip install -r requirements.txt
 
 ---
 
-## 🤖 Install Ollama
+## 4. Install Ollama
 
-Download Ollama from:
+Download and install Ollama:
 
 https://ollama.com/download
 
-Verify installation:
-
-```bash
-ollama --version
-```
-
-Download the Llama model:
+Pull the required model:
 
 ```bash
 ollama pull llama3.2
 ```
 
-Verify installed models:
-
-```bash
-ollama list
-```
+_(Replace with the model configured in your `.env` if different.)_
 
 ---
 
-## 🔧 Environment Variables
+## 5. Configure Environment Variables
 
-Create a `.env` file in the project root.
+Create a `.env` file:
 
 ```env
-APP_NAME=AI Agent Project
-HOST=127.0.0.1
-PORT=8000
 OLLAMA_MODEL=llama3.2
 ```
 
 ---
 
-## ▶️ Running the Application
-
-Start the FastAPI server:
+## 6. Run the application
 
 ```bash
-python -m uvicorn app.main:app --reload
+uvicorn app.main:app --reload
 ```
 
-Server:
+---
 
-```
-http://127.0.0.1:8000
-```
-
-Swagger Documentation:
+## 7. Open Swagger UI
 
 ```
 http://127.0.0.1:8000/docs
@@ -152,80 +177,181 @@ http://127.0.0.1:8000/docs
 
 ---
 
-## 🧪 Testing
+# 💬 Example API Requests
 
-### Test Ollama
+## Generate SQL
 
-```bash
-python test_ollama.py
-```
-
-### Test LangGraph
-
-```bash
-python test_graph.py
+```json
+{
+  "message": "Generate SQL to list all employees",
+  "session_id": "default"
+}
 ```
 
 ---
 
-## 📌 Current Progress
+## Explain SQL
 
-### Phase 1
-
-- Project setup
-- FastAPI application
-- LangGraph integration
-- Ollama integration
-- Configuration management
-- Logging
-- GitHub repository setup
+```json
+{
+  "message": "Explain SELECT * FROM employees",
+  "session_id": "default"
+}
+```
 
 ---
 
-## 📅 Roadmap
+## Optimize SQL
 
-### Phase 2
+```json
+{
+  "message": "Optimize SELECT * FROM employees",
+  "session_id": "default"
+}
+```
 
-- Chat API endpoint
-- LangGraph execution through FastAPI
-- Request and response models
+---
 
-### Phase 3
+## Detect SQL Bugs
 
-Implemented features:
+```json
+{
+  "message": "Find the bug in: SELEC * FROM employees",
+  "session_id": "default"
+}
+```
 
-- SQL Query Explanation
-- SQL Bug Detection
-- SQL Query Optimization
-- Natural Language to SQL Generation
-- Intent-based routing using LangGraph
-- Modular graph architecture
-- Reusable LLM helper for cleaner node implementation
+---
 
-Current Capabilities:
+## List Database Tables
 
-- Explain SQL queries
-- Detect SQL syntax and logic issues
-- Suggest query optimizations
+```json
+{
+  "message": "List all database tables",
+  "session_id": "default"
+}
+```
+
+---
+
+## Describe a Table
+
+```json
+{
+  "message": "Describe the employees table",
+  "session_id": "default"
+}
+```
+
+---
+
+## Execute SQL
+
+```json
+{
+  "message": "Execute this SQL query: SELECT * FROM employees;",
+  "session_id": "default"
+}
+```
+
+---
+
+# 🔒 SQL Safety
+
+To protect the database, the application only executes **read-only** queries.
+
+Allowed:
+
+```sql
+SELECT * FROM employees;
+```
+
+Blocked:
+
+```sql
+DROP TABLE employees;
+
+DELETE FROM employees;
+
+UPDATE employees SET salary = 100000;
+
+INSERT INTO employees VALUES (...);
+
+ALTER TABLE employees ...
+
+TRUNCATE TABLE employees;
+```
+
+Unsafe queries are rejected before execution.
+
+---
+
+# 🧠 Agent Capabilities
+
+The AI agent can:
+
 - Generate SQL from natural language
-- Automatically route requests to the appropriate AI node
-
-### Phase 4
-
-- Tool integration
-- Multi-agent workflows
-- Retrieval-Augmented Generation (RAG)
-
----
-
-## 📄 License
-
-This project is for educational and learning purposes.
+- Explain SQL queries
+- Optimize SQL performance
+- Detect SQL syntax issues
+- Inspect database schema
+- Execute safe SQL queries
+- Maintain conversational context using LangGraph memory
+- Use tools dynamically through LangChain
 
 ---
 
-## 👨‍💻 Author
+# 📊 Logging
 
-**Abdul Samad**
+The application logs:
 
-GitHub: https://github.com/ABDULSAMAD201
+- Incoming user requests
+- Tool selection
+- SQL execution
+- Query results
+- Errors and exceptions
+
+This improves observability and debugging.
+
+---
+
+# 🧪 Testing
+
+Run the application:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Then test endpoints through:
+
+```
+http://127.0.0.1:8000/docs
+```
+
+---
+
+# 🚀 Future Improvements
+
+- Docker & Docker Compose
+- PostgreSQL/MySQL support
+- Authentication
+- User-specific chat history
+- Streaming responses
+- Query execution statistics
+- Multi-database support
+- Vector database integration
+- RAG for SQL documentation
+- Web frontend (React/Next.js)
+- CI/CD with GitHub Actions
+
+---
+
+# 🤝 Contributing
+
+Contributions, bug reports, and feature requests are welcome.
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Submit a Pull Request
