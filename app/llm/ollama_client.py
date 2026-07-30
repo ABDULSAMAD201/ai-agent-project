@@ -1,8 +1,8 @@
 from langchain_ollama import ChatOllama
-
-from app.core.config import OLLAMA_MODEL
+from app.core.config import OLLAMA_BASE_URL, OLLAMA_MODEL
 
 llm = ChatOllama(
     model=OLLAMA_MODEL,
-    temperature=0
+    base_url=OLLAMA_BASE_URL,
+    temperature=0,
 )

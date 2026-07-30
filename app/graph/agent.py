@@ -1,7 +1,7 @@
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode
-
+from app.core.logger import logger
 from app.graph.state import GraphState
 from app.llm.ollama_client import llm
 
@@ -47,30 +47,34 @@ def agent_node(state: GraphState):
     messages = [
         SystemMessage(
             content="""
-You are an intelligent SQL Assistant.
+You are an AI SQL Assistant.
 
-You have access to several tools.
+You have access to tools that interact with a database.
 
-Follow these rules:
+IMPORTANT:
+- Do not ask the user to choose an option if their request is already clear.
+- If a suitable tool exists, call it immediately.
+- Never answer questions about the database from memory.
+- Always use the available tools.
 
-1. If the user asks to CREATE SQL, use the SQL generation tool.
+Use these rules:
 
-2. If the user asks to EXPLAIN SQL, use the SQL explanation tool.
+1. If the user asks to list tables, call list_database_tables.
 
-3. If the user asks to OPTIMIZE SQL, use the SQL optimization tool.
+2. If the user asks to describe a table, call describe_database_table.
 
-4. If the user asks to FIX SQL, use the SQL bug detection tool.
+3. If the user asks to generate SQL, call generate_sql.
 
-5. If the user asks for DATA from the database:
+4. If the user asks to explain SQL, call explain_sql.
 
-- First generate the SQL.
-- Then execute the SQL.
-- Return the results.
+5. If the user asks to optimize SQL, call optimize_sql.
 
-6. If the user asks about tables or schema,
-use the schema tools.
+6. If the user asks to find bugs in SQL, call detect_sql_bug.
 
-Always use tools instead of making up database information.
+7. If the user provides an SQL query and asks to execute it,
+call execute_sql.
+
+Always prefer calling a tool over responding conversationally.
 """
         )
     ]
@@ -86,15 +90,19 @@ Always use tools instead of making up database information.
 
     response = llm_with_tools.invoke(messages)
 
-    print("=" * 50)
-    print(response)
-    print("=" * 50)
+    logger.info("LLM Response:")
+    logger.info(response)
+
+    tool_name = None
+
+    if response.tool_calls:
+        tool_name = response.tool_calls[0]["name"]
 
     return {
         "messages": [response],
         "response": response.content,
+        "tool_used": tool_name,
     }
-
 
 def should_continue(state: GraphState):
 

@@ -14,3 +14,5 @@ class GraphState(TypedDict):
 
     sql: str
     query_results: list[dict]
+
+    tool_used: str
